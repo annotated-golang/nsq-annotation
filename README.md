@@ -17,3 +17,50 @@ Kafka等，他们与NSQ各有功能上的不同和实现上的不同。NSQ可以
 >[-] 代表无需备注，自行阅读。
 
 ````
+├── apps
+│   ├── nsq_stat
+│   ├── nsq_tail
+│   ├── nsq_to_file
+│   ├── nsq_to_http
+│   ├── nsq_to_nsq
+│   ├── nsqadmin
+│   ├── nsqd
+│   ├── nsqlookupd
+│   └── to_nsq
+├── bench
+│   ├── bench_channels
+│   ├── bench_reader
+│   └── bench_writer
+├── contrib
+├── internal
+│   ├── app
+│   ├── auth
+│   ├── clusterinfo
+│   ├── dirlock
+│   ├── http_api
+│   ├── lg
+│   ├── pqueue
+│   ├── protocol
+│   ├── quantile
+│   ├── statsd
+│   ├── stringy
+│   ├── test
+│   ├── util
+│   ├── version
+│   └── writers
+├── nsqadmin
+│   ├── static
+│   │   ├── css
+│   │   ├── fonts
+│   │   ├── html
+│   │   ├── img
+│   │   └── js
+│   │       ├── collections
+│   │       ├── lib
+│   │       ├── models
+│   │       └── views
+│   └── test
+├── nsqd
+│   └── test
+│       └── certs
+└── nsqlookupd
