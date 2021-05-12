@@ -24,7 +24,7 @@ Kafka等，他们与NSQ各有功能上的不同和实现上的不同。NSQ可以
 │   ├── nsq_to_http
 │   ├── nsq_to_nsq
 │   ├── nsqadmin
-│   ├── nsqd
+│   ├── nsqd                     [√] nsqd程序入口
 │   ├── nsqlookupd
 │   └── to_nsq
 ├── bench

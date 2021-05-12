@@ -12,6 +12,7 @@ import (
 	"github.com/nsqio/nsq/nsqd"
 )
 
+// tls 配置对象封装
 type tlsRequiredOption int
 
 func (t *tlsRequiredOption) Set(s string) error {
@@ -103,6 +104,7 @@ func (cfg config) Validate() {
 	}
 }
 
+// nsqdFlagSet 绑定flag到Options对象
 func nsqdFlagSet(opts *nsqd.Options) *flag.FlagSet {
 	flagSet := flag.NewFlagSet("nsqd", flag.ExitOnError)
 

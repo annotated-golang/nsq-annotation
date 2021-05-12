@@ -48,19 +48,24 @@ func (p *program) Init(env svc.Environment) error {
 	return nil
 }
 
+// Start 运行nsqd
 func (p *program) Start() error {
+	// 初始化全部配置
 	opts := nsqd.NewOptions()
 
+	// 读取flag替换掉初始化的配置
 	flagSet := nsqdFlagSet(opts)
 	flagSet.Parse(os.Args[1:])
 
 	rand.Seed(time.Now().UTC().UnixNano())
 
+	// 如果是 version 命令 打印version则退出
 	if flagSet.Lookup("version").Value.(flag.Getter).Get().(bool) {
 		fmt.Println(version.String("nsqd"))
 		os.Exit(0)
 	}
 
+	// 读取配置文件里的配置项
 	var cfg config
 	configFile := flagSet.Lookup("config").Value.String()
 	if configFile != "" {
@@ -71,8 +76,10 @@ func (p *program) Start() error {
 	}
 	cfg.Validate()
 
+	// 合并flag和配置文件，得到最终配置。
 	options.Resolve(opts, flagSet, cfg)
 
+	// 生成nsqd对象，并加载元数据
 	nsqd, err := nsqd.New(opts)
 	if err != nil {
 		logFatal("failed to instantiate nsqd - %s", err)
@@ -88,6 +95,7 @@ func (p *program) Start() error {
 		logFatal("failed to persist metadata - %s", err)
 	}
 
+	// 监听SIGTERM信号
 	signalChan := make(chan os.Signal, 1)
 	go func() {
 		// range over all term signals
@@ -101,8 +109,10 @@ func (p *program) Start() error {
 	}()
 	signal.Notify(signalChan, syscall.SIGTERM)
 
+	// 运行nsqd
 	go func() {
 		err := p.nsqd.Main()
+		// 错误则自己调用Stop，并错误退出状态码
 		if err != nil {
 			p.Stop()
 			os.Exit(1)
@@ -112,6 +122,7 @@ func (p *program) Start() error {
 	return nil
 }
 
+// Stop 停止nsqd程序
 func (p *program) Stop() error {
 	p.once.Do(func() {
 		p.nsqd.Exit()
@@ -120,6 +131,8 @@ func (p *program) Stop() error {
 }
 
 // Context returns a context that will be canceled when nsqd initiates the shutdown
+// --------------------------------------------------------------------------------------------
+// Context 返回一个context对象，当nsqd进行关闭
 func (p *program) Context() context.Context {
 	return p.nsqd.Context()
 }
